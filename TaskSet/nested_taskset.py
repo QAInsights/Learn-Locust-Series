@@ -1,5 +1,4 @@
 from locust import TaskSet, constant, task, HttpUser
-import random
 
 
 class MyHTTPCat(TaskSet):
@@ -8,6 +7,7 @@ class MyHTTPCat(TaskSet):
     def get_status(self):
         self.client.get("/200")
         print("Get Status of 200")
+        self.interrupt(reschedule=False)
 
 
 class MyAnotherHTTPCat(TaskSet):
@@ -16,6 +16,7 @@ class MyAnotherHTTPCat(TaskSet):
     def get_500_status(self):
         self.client.get("/500")
         print("Get Status of 500")
+        self.interrupt(reschedule=False)
 
 
 class MyLoadTest(HttpUser):
