@@ -25,10 +25,3 @@ class Between(User):
     @task
     def launch(self):
         print("Between Demo")
-
-
-class Demo(SequentialTaskSet):
-
-    tasks = [Between, Constant, ConstantPacing]
-
-
