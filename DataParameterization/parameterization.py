@@ -4,10 +4,15 @@ from readtestdata import CsvRead
 
 class MyScript(SequentialTaskSet):
 
+    # def __init__(self, parent):
+    #     super().__init__(parent)
+    #     self.test_data = CsvRead("DataParameterization\\customer-data.csv").read()
+
     @task
     def place_order(self):
         test_data = CsvRead("DataParameterization\\customer-data.csv").read()
         print(test_data)
+
         data = {
             "custname": test_data['name'],
             "custtel": test_data['phone'],
