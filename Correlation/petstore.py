@@ -1,5 +1,6 @@
 from locust import HttpUser, SequentialTaskSet, task, constant
 import re
+import random
 
 
 class PetStore(SequentialTaskSet):
@@ -7,7 +8,7 @@ class PetStore(SequentialTaskSet):
     def __init__(self, parent):
         super().__init__(parent)
         self.jsession = ""
-
+        self.random_product = ""
 
     @task
     def home_page(self):
@@ -37,14 +38,13 @@ class PetStore(SequentialTaskSet):
     def signin_page(self):
         self.client.cookies.clear()
         url = "/actions/Account.action;jsessionid=" + self.jsession + "?signonForm="
-        print(url)
+        # print(url)
         with self.client.get(url, catch_response=True, name="T20_SignInPage") as response:
             #  print(response.text)
             if "Please enter your username and password." in response.text:
                 response.success()
             else:
                 response.failure("Sign in page check failed")
-
 
     @task
     def login(self):
@@ -56,13 +56,29 @@ class PetStore(SequentialTaskSet):
             "signon": "Login"
         }
         with self.client.post(url, name="T30_SignIn", data=data, catch_response=True) as response:
-            print(response.text)
+            # print(response.text)
             if "Welcome ABC!" in response.text:
                 response.success()
+                try:
+                    # Catalog.action\?viewCategory=&categoryId=(.+?)\"
+                    # print(response.text)
+                    random_product = re.findall(r"Catalog.action\?viewCategory=&categoryId=(.+?)\"", response.text)
+                    self.random_product = random.choice(random_product)
+                except AttributeError:
+                    self.random_product = ""
             else:
                 response.failure("Sign in Failed")
 
-    
+    @task
+    def add_random_product(self):
+        url = "/actions/Catalog.action?viewCategory=&categoryId=" + self.random_product
+        name = "T40_" + self.random_product + "_Page"
+        with self.client.get(url, name=name, catch_response=True) as response:
+            if self.random_product in response.text:
+                # print(response.text)
+                response.success()
+            else:
+                response.failure("Product page not loaded")
 
 
 class LoadTest(HttpUser):
