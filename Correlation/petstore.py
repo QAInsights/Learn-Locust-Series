@@ -6,7 +6,7 @@ import random
 class PetStore(SequentialTaskSet):
 
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__(self, parent)
         self.jsession = ""
         self.random_product = ""
 
@@ -66,7 +66,7 @@ class PetStore(SequentialTaskSet):
                 response.failure("Sign in Failed")
 
     @task
-    def add_random_product_page(self):
+    def random_product_page(self):
         url = "/actions/Catalog.action?viewCategory=&categoryId=" + self.random_product
         name = "T40_" + self.random_product + "_Page"
         with self.client.get(url, name=name, catch_response=True) as response:
