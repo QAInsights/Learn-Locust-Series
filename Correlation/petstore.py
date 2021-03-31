@@ -29,7 +29,7 @@ class PetStore(SequentialTaskSet):
                     response.failure("Products check failed.")
                     break
             try:
-                jsession = re.search(r"jsessionid=(.+?)\?", response.text)
+                jsession = re.search(r"jsessionid=(.+?)\?", response.text)  # Extracting the jsession id
                 self.jsession = jsession.group(1)
             except AttributeError:
                 self.jsession = ""
@@ -38,9 +38,7 @@ class PetStore(SequentialTaskSet):
     def signin_page(self):
         self.client.cookies.clear()
         url = "/actions/Account.action;jsessionid=" + self.jsession + "?signonForm="
-        # print(url)
         with self.client.get(url, catch_response=True, name="T20_SignInPage") as response:
-            #  print(response.text)
             if "Please enter your username and password." in response.text:
                 response.success()
             else:
@@ -60,25 +58,31 @@ class PetStore(SequentialTaskSet):
             if "Welcome ABC!" in response.text:
                 response.success()
                 try:
-                    # Catalog.action\?viewCategory=&categoryId=(.+?)\"
-                    # print(response.text)
-                    random_product = re.findall(r"Catalog.action\?viewCategory=&categoryId=(.+?)\"", response.text)
-                    self.random_product = random.choice(random_product)
+                    random_product = re.findall(r"Catalog.action\?viewCategory=&categoryId=(.+?)\"", response.text)  # Extracting all the products
+                    self.random_product = random.choice(random_product)  # Storing the random product
                 except AttributeError:
                     self.random_product = ""
             else:
                 response.failure("Sign in Failed")
 
     @task
-    def add_random_product(self):
+    def add_random_product_page(self):
         url = "/actions/Catalog.action?viewCategory=&categoryId=" + self.random_product
         name = "T40_" + self.random_product + "_Page"
         with self.client.get(url, name=name, catch_response=True) as response:
             if self.random_product in response.text:
-                # print(response.text)
                 response.success()
             else:
                 response.failure("Product page not loaded")
+
+    @task
+    def sign_out(self):
+        with self.client.get("/actions/Account.action?signoff=", name="T50_SignOff", catch_response=True) as response:
+            if response.status_code == 200:
+                response.success()
+            else:
+                response.failure("Log off failed")
+        self.client.cookies.clear()
 
 
 class LoadTest(HttpUser):
