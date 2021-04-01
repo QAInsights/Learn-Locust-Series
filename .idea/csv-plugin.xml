@@ -45,6 +45,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\locust.conf">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\myconfig.conf">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\temp.py">
           <value>
             <Attribute>
