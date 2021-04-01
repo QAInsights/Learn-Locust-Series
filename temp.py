@@ -9,24 +9,24 @@ import requests
 #                         506, 507, 508, 510, 511, 599]
 # print(random.choice(status_codes))
 #
-response = '''
-<area alt="Birds" coords="72,2,280,250"
-                href="Catalog.action?viewCategory=&categoryId=BIRDS" shape="RECT" />
-        <area alt="Fish" coords="2,180,72,250"
-                href="Catalog.action?viewCategory=&categoryId=FISH" shape="RECT" />
-        <area alt="Dogs" coords="60,250,130,320"
-                href="Catalog.action?viewCategory=&categoryId=DOGS" shape="RECT" />
-        <area alt="Reptiles" coords="140,270,210,340"
-                href="Catalog.action?viewCategory=&categoryId=REPTILES" shape="RECT" />
-        <area alt="Cats" coords="225,240,295,310"
-                href="Catalog.action?viewCategory=&categoryId=CATS" shape="RECT" />
-        <area alt="Birds" coords="280,180,350,250"
-                href="Catalog.action?viewCategory=&categoryId=BIRDS" shape="RECT" />
-
-'''
-r = re.findall("href=\"Catalog.action\?viewCategory=&categoryId=(.*?)\"", response)
-print(r)
-print(random.choice(r))
+# response = '''
+# <area alt="Birds" coords="72,2,280,250"
+#                 href="Catalog.action?viewCategory=&categoryId=BIRDS" shape="RECT" />
+#         <area alt="Fish" coords="2,180,72,250"
+#                 href="Catalog.action?viewCategory=&categoryId=FISH" shape="RECT" />
+#         <area alt="Dogs" coords="60,250,130,320"
+#                 href="Catalog.action?viewCategory=&categoryId=DOGS" shape="RECT" />
+#         <area alt="Reptiles" coords="140,270,210,340"
+#                 href="Catalog.action?viewCategory=&categoryId=REPTILES" shape="RECT" />
+#         <area alt="Cats" coords="225,240,295,310"
+#                 href="Catalog.action?viewCategory=&categoryId=CATS" shape="RECT" />
+#         <area alt="Birds" coords="280,180,350,250"
+#                 href="Catalog.action?viewCategory=&categoryId=BIRDS" shape="RECT" />
+#
+# '''
+# r = re.findall("href=\"Catalog.action\?viewCategory=&categoryId=(.*?)\"", response)
+# print(r)
+# print(random.choice(r))
 # print(r.group(1))
 # print(len(r.groups()))
 # print(r.groups())
@@ -38,3 +38,22 @@ print(random.choice(r))
 # print("Hello "future "python!")
 
 # print("Hello future python!")
+
+class Parent():
+    def __init__(self):
+        print("Parent")
+
+class ChildA(Parent):
+    def __init__(self):
+        print("Child A")
+
+class ChildB(Parent):
+    def __init__(self, name):
+        self.name = name
+        super().__init__()
+        print("Child B")
+
+a = ChildB("max")
+print(ChildB.__mro__)
+
+

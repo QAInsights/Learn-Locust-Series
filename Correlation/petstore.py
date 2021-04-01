@@ -1,4 +1,4 @@
-from locust import HttpUser, SequentialTaskSet, task, constant
+from locust import HttpUser, SequentialTaskSet, task, constant, log
 import re
 import random
 
@@ -6,7 +6,7 @@ import random
 class PetStore(SequentialTaskSet):
 
     def __init__(self, parent):
-        super().__init__(self, parent)
+        super().__init__(parent)
         self.jsession = ""
         self.random_product = ""
 
@@ -15,6 +15,7 @@ class PetStore(SequentialTaskSet):
         with self.client.get("", catch_response=True, name="T00_HomePage") as response:
             if "Welcome to JPetStore 6" in response.text and response.elapsed.total_seconds() < 2.0:
                 response.success()
+                log.setup_logging("Testing")
             else:
                 response.failure("Home page took too long to load and/or text check has failed.")
 
